@@ -33,6 +33,12 @@ defmodule Auction do
 
   end
   
+  def edit_item(id) do
+    get_item(id)
+    |> Item.changeset()
+  end
+
+  
   def new_item, do: Item.changeset(%Item{})
 
   def get_item(id) do
