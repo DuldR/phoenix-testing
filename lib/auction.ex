@@ -7,8 +7,10 @@ defmodule Auction do
   if it comes from the database, an external API or others.
   """
 
+  import Ecto.Query
 
-  alias Auction.{Item, Repo, User, Password}
+
+  alias Auction.{Bid, Item, Repo, User, Password}
 
   def get_user_by_username_and_password(username, password) do
     with user when not is_nil(user) <- Repo.get_by(User, %{username: username}),
@@ -17,6 +19,31 @@ defmodule Auction do
     else
       _ -> Password.dummy_verify
     end
+  end
+
+  def insert_bid(params) do
+    %Bid{}
+    |> Bid.changeset(params)
+    |> Repo.insert()
+  end
+
+  def get_item_with_bids(id) do
+    id
+    |> get_item()
+    |> Repo.preload(bids: [:user])
+  end
+
+  def new_bid, do: Bid.changeset(%Bid{})
+
+  def get_bids_for_user(user) do
+    query =
+      from b in Bid,
+      where: b.user_id == ^user.id,
+      order_by: [desc: :inserted_at],
+      preload: :item,
+      limit: 10
+
+    Repo.all(query)
   end
 
 

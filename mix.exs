@@ -50,7 +50,8 @@ defmodule Auction.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:comeonin, "~> 5.3"},
-      {:pbkdf2_elixir, "~> 2.0"}
+      {:pbkdf2_elixir, "~> 2.0"},
+      {:timex, "> 0.0.0"}
     ]
   end
 
